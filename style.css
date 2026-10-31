@@ -369,3 +369,45 @@ header .control-btn.active{background:linear-gradient(135deg,#0d4fae,#082b64)!im
 
 /* v38: move Bass Boost demo button slightly higher */
 .bass-demo{bottom:178px}
+
+/* Two distinct Opti plans, with their own checkout actions. */
+.opti-grid{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.opti-grid .opti-card{min-height:0;padding:32px;display:flex;flex-direction:column;gap:0;border-color:rgba(72,119,201,.26)!important}
+.opti-grid .opti-plus{background:linear-gradient(145deg,rgba(8,25,51,.99),rgba(2,7,15,.99))!important;border-color:rgba(59,132,255,.58)!important;box-shadow:0 18px 55px rgba(11,72,182,.12)}
+.opti-eyebrow{color:#73aafa;font-size:10px;letter-spacing:.15em;font-weight:900;margin-bottom:17px}
+.opti-grid .opti-card h3{font-size:clamp(31px,3.4vw,53px);line-height:.95;margin:0 0 16px}
+.opti-grid .opti-card>p{color:#9caac0;font-size:13px;line-height:1.5;min-height:40px;margin:0 0 16px}
+.opti-grid .opti-card ul{display:grid;grid-template-columns:1fr;gap:9px;margin:0 0 25px;padding:0;list-style:none}
+.opti-grid .opti-card li{font-size:13px;line-height:1.4;min-height:20px}
+.opti-grid .opti-card li:before{content:'✓';color:#5b9cff;margin-right:10px;font-weight:900}
+.opti-grid .opti-foot{margin-top:auto;padding-top:18px;border-top:1px solid rgba(97,145,215,.17)}
+.opti-grid .opti-foot p{margin:0 0 13px;color:#a2b4ce;font-size:12px}
+.opti-grid .price,.opti-grid .buy{position:static;transform:none;margin:0}
+.opti-grid .price strong{font-size:35px}
+.opti-grid .opti-foot small{display:block;color:#70829c;margin:4px 0 18px;font-size:11px}
+.opti-grid .buy{display:flex;align-items:center;justify-content:space-between;width:100%;text-align:left;min-height:50px}
+.opti-plus .buy{background:#146dff;border-color:#146dff}
+.opti-plus .badge{top:24px;right:24px;left:auto;font-size:9px}
+@media(max-width:760px){.opti-grid{grid-template-columns:1fr}.opti-grid .opti-card{padding:24px}.opti-plus .badge{position:static;align-self:flex-start;margin-bottom:16px}.opti-grid .opti-card h3{font-size:40px}}
+
+/* Compact Opti cards sit in the same storefront grid as other products. */
+.services .cards .opti-grid{display:contents}
+.opti-grid .opti-card{padding:24px;gap:0;min-width:0}
+.opti-grid .opti-card h3{font-size:clamp(30px,2.7vw,42px);margin-bottom:12px}
+.opti-grid .opti-card>p{font-size:12px;min-height:0;margin-bottom:14px}
+.opti-grid .opti-card ul{gap:5px;margin-bottom:18px}
+.opti-grid .opti-card li{font-size:11px;min-height:0;line-height:1.35}
+.opti-grid .opti-card li:before{margin-right:7px}
+.opti-grid .opti-foot{padding-top:13px}
+.opti-grid .opti-foot p{font-size:11px;margin-bottom:6px}
+.opti-grid .price strong{font-size:29px}
+.opti-grid .opti-foot small{margin:3px 0 12px;font-size:10px}
+.opti-grid .buy{min-height:44px;font-size:9px;padding:11px 13px}
+.opti-grid .opti-eyebrow{font-size:9px;margin-bottom:12px}
+.opti-grid .opti-plus .badge{position:static;align-self:flex-start;margin-bottom:13px;padding:7px 11px}
+@media(max-width:650px){.opti-grid .opti-card{padding:22px}.opti-grid .opti-card h3{font-size:38px}}
+
+/* Two Opti plans on top, three other packs together on the next row. */
+.services .cards{grid-template-columns:repeat(3,minmax(0,1fr))}
+.services .cards .opti-grid{display:grid;grid-column:1/-1;grid-template-columns:repeat(2,minmax(0,430px));justify-content:center;gap:16px}
+@media(max-width:760px){.services .cards{grid-template-columns:1fr}.services .cards .opti-grid{grid-template-columns:1fr;max-width:430px;width:100%;justify-self:center}}
