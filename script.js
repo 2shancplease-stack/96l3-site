@@ -52,7 +52,6 @@ Object.assign(ruToEn,{
 });
 
 Object.assign(ruToEn,{'Я ОПЛАТИЛ — ЧТО ДАЛЬШЕ?':'I’VE PAID — WHAT’S NEXT?','ПОСЛЕ ОПЛАТЫ':'AFTER PAYMENT','ЧТО ДЕЛАТЬ ДАЛЬШЕ?':'WHAT HAPPENS NEXT?','Зайди в наш Discord и создай заказ на':'Join our Discord and create an order for','купленный товар':'the purchased product','Укажи способ оплаты и приложи подтверждение — дальше мы свяжемся с тобой.':'Select your payment method and attach proof of payment — we’ll contact you from there.','Зайди в Discord':'Join Discord','Создай заказ на купленный товар':'Create an order for the purchased product','Приложи подтверждение оплаты':'Attach payment confirmation'});
-Object.assign(ruToEn,{'ЦВЕТ • ПРИЦЕЛ':'COLOR • RETICLE','Насыщенные цвета и чёрная прицельная марка.':'Vibrant colors and a black holo reticle.','Настройка насыщенности':'Color saturation settings','Чёрный holo':'Black holo reticle','Выбери удобный срок доступа':'Choose your access period','ОТ':'FROM','ВЫБРАТЬ СРОК →':'CHOOSE A PLAN →'});
 const textNodes=[];const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);while(walker.nextNode()){const n=walker.currentNode;if(n.parentElement?.closest('script,style'))continue;const key=n.nodeValue.trim();if(key&&ruToEn[key])textNodes.push({n,ru:key,en:ruToEn[key]})}
 function setLang(lang){document.documentElement.lang=lang;
 document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));textNodes.forEach(x=>{const lead=x.n.nodeValue.match(/^\s*/)[0],trail=x.n.nodeValue.match(/\s*$/)[0];x.n.nodeValue=lead+(lang==='en'?x.en:x.ru)+trail});document.querySelectorAll('.main-nav a').forEach(a=>{const href=a.getAttribute('href');if(href==='#fpscalc'){const img=a.querySelector('img');a.childNodes.forEach(n=>{if(n.nodeType===3)n.nodeValue=lang==='en'?' FPS CALC':' КАЛЬКУЛЯТОР FPS'})}if(a.classList.contains('nav-discord')){a.childNodes.forEach(n=>{if(n.nodeType===3)n.nodeValue=lang==='en'?' DISCORD':' ДИСКОРД'})}});const fpsTitle=document.querySelector('#fpscalc h2');if(fpsTitle)fpsTitle.innerHTML=lang==='en'?'FPS <em>CALCULATOR</em>':'КАЛЬКУЛЯТОР <em>FPS</em>';localStorage.setItem('96l3-lang-v18',lang)}
@@ -129,25 +128,22 @@ document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',(
  document.querySelectorAll('[data-legal]').forEach(b=>b.addEventListener('click',()=>open(b.dataset.legal)));document.querySelectorAll('[data-legal-close]').forEach(b=>b.addEventListener('click',close));document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))close()});
 })();
 
-// Graphics / Black Holo: choose duration, then see available method labels.
+
+// Graphics / Black Holo: the two card buttons open the selected plan directly.
 const graphicsModal=document.getElementById('graphicsModal');
-const graphicsPlans=document.getElementById('graphicsPlans');
-const graphicsCheckout=document.getElementById('graphicsCheckout');
-let graphicsPlan=null,graphicsMethod=null;
-function graphicsIsEnglish(){return document.documentElement.lang==='en'}
-function graphicsPrice(amount){const c=currencyRates[activeCurrency];const value=amount*c.rate;return c.symbol+(c.decimals?value.toFixed(c.decimals):Math.round(value).toLocaleString('ru-RU'))}
+let graphicsPlan=null;
 function renderGraphicsDialog(){
- const en=graphicsIsEnglish();
- graphicsModal.querySelectorAll('[data-ru][data-en]').forEach(el=>{el.textContent=en?el.dataset.en:el.dataset.ru});
- if(graphicsPlan){document.getElementById('graphicsSelectedName').textContent=graphicsPlan==='3days'?(en?'3 DAYS':'3 ДНЯ'):(en?'LIFETIME':'НАВСЕГДА');document.getElementById('graphicsSelectedPrice').textContent=graphicsPrice(graphicsPlan==='3days'?4.99:14.99)}
+ const en=document.documentElement.lang==='en';
+ document.querySelectorAll('.graphics-card [data-ru][data-en], #graphicsModal [data-ru][data-en]').forEach(el=>{el.textContent=en?el.dataset.en:el.dataset.ru});
+ if(graphicsPlan){const c=currencyRates[activeCurrency],amount=graphicsPlan==='3days'?4.99:14.99,value=amount*c.rate;
+  document.getElementById('graphicsSelectedName').textContent=graphicsPlan==='3days'?(en?'3 DAYS':'3 ДНЯ'):(en?'LIFETIME':'НАВСЕГДА');
+  document.getElementById('graphicsSelectedPrice').textContent=c.symbol+(c.decimals?value.toFixed(c.decimals):Math.round(value).toLocaleString('ru-RU'))}
  document.getElementById('graphicsPaymentNote').textContent=en?'Payment details will be added soon. You can create an order in Discord.':'Реквизиты добавим позже. Пока можно создать заказ в Discord.';
 }
 function closeGraphicsModal(){graphicsModal.classList.remove('open');graphicsModal.setAttribute('aria-hidden','true');document.body.classList.remove('modal-open')}
-document.querySelector('.graphics-open')?.addEventListener('click',()=>{graphicsPlan=null;graphicsMethod=null;graphicsPlans.hidden=false;graphicsCheckout.hidden=true;graphicsModal.classList.add('open');graphicsModal.setAttribute('aria-hidden','false');document.body.classList.add('modal-open');renderGraphicsDialog();graphicsModal.querySelector('.modal-close').focus()});
+document.querySelectorAll('.graphics-buy').forEach(btn=>btn.addEventListener('click',()=>{graphicsPlan=btn.dataset.plan;graphicsModal.querySelectorAll('[data-method]').forEach(el=>el.classList.remove('active'));renderGraphicsDialog();graphicsModal.classList.add('open');graphicsModal.setAttribute('aria-hidden','false');document.body.classList.add('modal-open');graphicsModal.querySelector('.modal-close').focus()}));
 graphicsModal.querySelectorAll('[data-graphics-close]').forEach(el=>el.addEventListener('click',closeGraphicsModal));
-graphicsModal.querySelectorAll('[data-plan]').forEach(el=>el.addEventListener('click',()=>{graphicsPlan=el.dataset.plan;graphicsPlans.hidden=true;graphicsCheckout.hidden=false;graphicsModal.querySelectorAll('[data-method]').forEach(x=>x.classList.remove('active'));renderGraphicsDialog();document.getElementById('graphicsBack').focus()}));
-document.getElementById('graphicsBack')?.addEventListener('click',()=>{graphicsCheckout.hidden=true;graphicsPlans.hidden=false;graphicsModal.querySelector('[data-plan="'+graphicsPlan+'"]').focus()});
-graphicsModal.querySelectorAll('[data-method]').forEach(el=>el.addEventListener('click',()=>{graphicsMethod=el.dataset.method;graphicsModal.querySelectorAll('[data-method]').forEach(x=>x.classList.toggle('active',x===el));renderGraphicsDialog()}));
+graphicsModal.querySelectorAll('[data-method]').forEach(el=>el.addEventListener('click',()=>{graphicsModal.querySelectorAll('[data-method]').forEach(x=>x.classList.toggle('active',x===el));renderGraphicsDialog()}));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&graphicsModal.classList.contains('open'))closeGraphicsModal()});
 document.querySelectorAll('[data-lang]').forEach(el=>el.addEventListener('click',renderGraphicsDialog));
 currencyMenu?.querySelectorAll('button').forEach(el=>el.addEventListener('click',renderGraphicsDialog));
