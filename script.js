@@ -135,15 +135,14 @@ let graphicsPlan=null;
 function renderGraphicsDialog(){
  const en=document.documentElement.lang==='en';
  document.querySelectorAll('.graphics-card [data-ru][data-en], #graphicsModal [data-ru][data-en]').forEach(el=>{el.textContent=en?el.dataset.en:el.dataset.ru});
- if(graphicsPlan){const c=currencyRates[activeCurrency],amount=graphicsPlan==='3days'?4.99:14.99,value=amount*c.rate;
+ if(graphicsPlan){const c=currencyRates[activeCurrency],amount=graphicsPlan==='3days'?3.99:14.99,value=amount*c.rate;
+  document.getElementById('graphicsPayment').href=graphicsPlan==='3days'?'https://oplata.info/asp2/pay_wm.asp?id_d=6123261&lang=ru-RU':'https://oplata.info/asp2/pay_wm.asp?id_d=6121406&lang=ru-RU';
   document.getElementById('graphicsSelectedName').textContent=graphicsPlan==='3days'?(en?'3 DAYS':'3 ДНЯ'):(en?'LIFETIME':'НАВСЕГДА');
   document.getElementById('graphicsSelectedPrice').textContent=c.symbol+(c.decimals?value.toFixed(c.decimals):Math.round(value).toLocaleString('ru-RU'))}
- document.getElementById('graphicsPaymentNote').textContent=en?'Payment details will be added soon. You can create an order in Discord.':'Реквизиты добавим позже. Пока можно создать заказ в Discord.';
 }
 function closeGraphicsModal(){graphicsModal.classList.remove('open');graphicsModal.setAttribute('aria-hidden','true');document.body.classList.remove('modal-open')}
-document.querySelectorAll('.graphics-buy').forEach(btn=>btn.addEventListener('click',()=>{graphicsPlan=btn.dataset.plan;graphicsModal.querySelectorAll('[data-method]').forEach(el=>el.classList.remove('active'));renderGraphicsDialog();graphicsModal.classList.add('open');graphicsModal.setAttribute('aria-hidden','false');document.body.classList.add('modal-open');graphicsModal.querySelector('.modal-close').focus()}));
+document.querySelectorAll('.graphics-buy').forEach(btn=>btn.addEventListener('click',()=>{graphicsPlan=btn.dataset.plan;renderGraphicsDialog();graphicsModal.classList.add('open');graphicsModal.setAttribute('aria-hidden','false');document.body.classList.add('modal-open');graphicsModal.querySelector('.modal-close').focus()}));
 graphicsModal.querySelectorAll('[data-graphics-close]').forEach(el=>el.addEventListener('click',closeGraphicsModal));
-graphicsModal.querySelectorAll('[data-method]').forEach(el=>el.addEventListener('click',()=>{graphicsModal.querySelectorAll('[data-method]').forEach(x=>x.classList.toggle('active',x===el));renderGraphicsDialog()}));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&graphicsModal.classList.contains('open'))closeGraphicsModal()});
 document.querySelectorAll('[data-lang]').forEach(el=>el.addEventListener('click',renderGraphicsDialog));
 currencyMenu?.querySelectorAll('button').forEach(el=>el.addEventListener('click',renderGraphicsDialog));

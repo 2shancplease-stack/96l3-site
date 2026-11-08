@@ -458,3 +458,7 @@ header .control-btn.active{background:linear-gradient(135deg,#0d4fae,#082b64)!im
 .graphics-card .graphics-buy:hover{background:linear-gradient(115deg,#182233,#202c40);border-color:#4a6490;transform:translateY(-1px)}
 .graphics-card ul{margin-bottom:160px}
 @media(max-width:760px){.services .cards{grid-template-columns:1fr}.services .cards .opti-grid{grid-template-columns:1fr;max-width:430px;justify-self:center}.graphics-card{min-height:450px!important}}
+
+.graphics-modal .graphics-methods{grid-template-columns:1fr;margin-bottom:12px}
+.graphics-methods #graphicsPayment{display:flex;align-items:center;justify-content:center;min-height:48px;padding:13px 16px;border:1px solid #2a303c;background:linear-gradient(115deg,#10141c,#151922);color:#fff;text-decoration:none;font-size:11px;font-weight:900;transition:background .2s,border-color .2s}
+.graphics-methods #graphicsPayment:hover{background:#1b2b43;border-color:#4a6490}
